@@ -19,8 +19,6 @@ pipeline {
         }
         steps {
           container('maven') {
-            sh "jx step pre build $DOCKER_REGISTRY/$ORG/$APP_NAME"
-
             sh "mvn versions:set -DnewVersion=$PREVIEW_VERSION"
             sh "mvn install"
             sh 'export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml'
@@ -48,7 +46,6 @@ pipeline {
             sh "git config --global credential.helper store"
 
             sh "jx step git credentials"
-            sh "jx step pre build $DOCKER_REGISTRY/$ORG/$APP_NAME"
 
             // so we can retrieve the version in later steps
             sh "echo \$(jx-release-version) > VERSION"
